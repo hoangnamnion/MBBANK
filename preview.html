@@ -802,27 +802,13 @@
       <div class="badge">
         <span class="badge-dot"></span> ALTERNATE APP ICONS PRO
       </div>
-      <h1>Đổi Icon Ngoài Màn Hình Chính</h1>
+      <h1>Mô Phỏng Trực Tiếp MB Bank</h1>
 
-      <!-- Icon Selection Grid -->
-      <div class="icon-selector-section">
-        <div class="icon-selector-title">
-          <span>Chọn Icon Ngoài Màn Hình</span>
-          <span style="font-size: 11px; color: #10B981;">Chạm để đổi</span>
-        </div>
-        <div class="icon-grid">
-          <div class="icon-card active" id="cardBlue" onclick="selectAppIcon('blue')">
-            <img src="app_icon.jpg" class="icon-card-img" alt="MB Xanh">
-            <div class="icon-card-label">MB Xanh</div>
-          </div>
-          <div class="icon-card" id="cardGold" onclick="selectAppIcon('gold')">
-            <img src="app_icon_gold.jpg" class="icon-card-img" alt="MB Gold VIP">
-            <div class="icon-card-label">Gold VIP</div>
-          </div>
-          <div class="icon-card" id="cardDark" onclick="selectAppIcon('dark')">
-            <img src="app_icon_dark.jpg" class="icon-card-img" alt="MB Dark Platinum">
-            <div class="icon-card-label">Platinum</div>
-          </div>
+      <div style="display: flex; align-items: center; gap: 16px; background: rgba(255,255,255,0.06); padding: 14px 18px; border-radius: 18px; margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.1);">
+        <img src="app_icon.jpg" alt="MB Bank Icon" style="width: 54px; height: 54px; border-radius: 14px; box-shadow: 0 8px 18px rgba(0,0,0,0.4);">
+        <div>
+          <div style="font-size: 14.5px; font-weight: 800; color: #fff;">Icon App Gốc Ban Đầu</div>
+          <div style="font-size: 12px; color: #94A3B8;">MB Bank Nguyên Bản (Conversion successful.jpg)</div>
         </div>
       </div>
 
@@ -1054,36 +1040,8 @@
   <script>
     let transactionType = 0; // 0: Nhận tiền (+), 1: Trừ tiền (-)
     let isHomeScreen = false;
-    let currentIcon = "blue"; // blue, gold, dark
     let islandTimer = null;
     let audioCtx = null;
-
-    const iconPaths = {
-      blue: "app_icon.jpg",
-      gold: "app_icon_gold.jpg",
-      dark: "app_icon_dark.jpg"
-    };
-
-    // Đổi Icon App (Cả bên ngoài Màn hình chính & Trong App)
-    function selectAppIcon(type) {
-      currentIcon = type;
-      const path = iconPaths[type];
-
-      // Đổi icon ngoài màn hình chính iPhone
-      document.getElementById('homeMBAppIcon').style.backgroundImage = `url('${path}')`;
-
-      // Đổi icon trên Dynamic Island & Notification Preview
-      document.getElementById('islandLogoBadge').style.backgroundImage = `url('${path}')`;
-      document.getElementById('notifAppIcon').style.backgroundImage = `url('${path}')`;
-
-      // Cập nhật viền active bên ngoài panel
-      document.getElementById('cardBlue').className = `icon-card ${type === 'blue' ? 'active' : ''}`;
-      document.getElementById('cardGold').className = `icon-card ${type === 'gold' ? 'active' : ''}`;
-      document.getElementById('cardDark').className = `icon-card ${type === 'dark' ? 'active' : ''}`;
-
-      // Phát âm thanh xác nhận đổi icon
-      playIOSTingSound();
-    }
 
     // Chuyển đổi qua lại giữa Màn hình chính & Trong App
     function toggleHomeScreen() {
@@ -1273,7 +1231,6 @@
     }
 
     setNowTime();
-    selectAppIcon('blue');
   </script>
 </body>
 </html>

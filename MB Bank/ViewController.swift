@@ -125,26 +125,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         return sc
     }()
 
-    // App Icon Picker (Đổi Icon ngoài màn hình chính)
-    private let iconLabel: UILabel = {
-        let label = UILabel()
-        label.text = "BIỂU TƯỢNG APP NGOÀI MÀN HÌNH CHÍNH"
-        label.font = UIFont.systemFont(ofSize: 11.5, weight: .bold)
-        label.textColor = UIColor(red: 0.0, green: 0.2, blue: 0.63, alpha: 1.0)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
 
-    private let iconSegmentedControl: UISegmentedControl = {
-        let sc = UISegmentedControl(items: ["MB Xanh", "MB Gold VIP", "MB Dark"])
-        sc.selectedSegmentIndex = 0
-        sc.selectedSegmentTintColor = UIColor(red: 0.0, green: 0.2, blue: 0.63, alpha: 1.0)
-        sc.setTitleTextAttributes([.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 13, weight: .bold)], for: .selected)
-        sc.setTitleTextAttributes([.foregroundColor: UIColor.darkGray, .font: UIFont.systemFont(ofSize: 13, weight: .medium)], for: .normal)
-        sc.backgroundColor = UIColor(white: 0.94, alpha: 1.0)
-        sc.translatesAutoresizingMaskIntoConstraints = false
-        return sc
-    }()
 
     // Input Fields (Không còn icon, sạch sẽ chuẩn minimalist banking)
     private let accountTextField = ViewController.createCleanTextField(placeholder: "Ví dụ: 0386868686")
@@ -331,9 +312,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
         contentView.addSubview(scheduleNotificationButton)
 
-        contentView.addSubview(iconLabel)
-        contentView.addSubview(iconSegmentedControl)
-
         // Constraints
         NSLayoutConstraint.activate([
             // Header
@@ -397,17 +375,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             scheduleNotificationButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             scheduleNotificationButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             scheduleNotificationButton.heightAnchor.constraint(equalToConstant: 54),
-
-            // Icon Label & Segmented
-            iconLabel.topAnchor.constraint(equalTo: scheduleNotificationButton.bottomAnchor, constant: 28),
-            iconLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            iconLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-
-            iconSegmentedControl.topAnchor.constraint(equalTo: iconLabel.bottomAnchor, constant: 8),
-            iconSegmentedControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            iconSegmentedControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            iconSegmentedControl.heightAnchor.constraint(equalToConstant: 42),
-            iconSegmentedControl.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -32)
+            scheduleNotificationButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -32)
         ])
 
         // Keyboards
@@ -429,7 +397,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
 
         transactionTypeSegmentedControl.addTarget(self, action: #selector(transactionTypeChanged), for: .valueChanged)
-        iconSegmentedControl.addTarget(self, action: #selector(iconSegmentedChanged), for: .valueChanged)
 
         nowTimeButton.addTarget(self, action: #selector(setNowTime), for: .touchUpInside)
         clearAllButton.addTarget(self, action: #selector(clearAllFields), for: .touchUpInside)
@@ -437,37 +404,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
         scheduleNotificationButton.addTarget(self, action: #selector(scheduleNotification), for: .touchUpInside)
         scheduleNotificationButton.addTarget(self, action: #selector(buttonTouchDown), for: .touchDown)
         scheduleNotificationButton.addTarget(self, action: #selector(buttonTouchUp), for: [.touchUpInside, .touchUpOutside, .touchCancel])
-    }
-
-    @objc private func iconSegmentedChanged() {
-        hapticFeedback.impactOccurred()
-        let selectedIndex = iconSegmentedControl.selectedSegmentIndex
-        let iconName: String?
-        if selectedIndex == 1 {
-            iconName = "IconGold"
-        } else if selectedIndex == 2 {
-            iconName = "IconDark"
-        } else {
-            iconName = nil // Về icon gốc MB Xanh
-        }
-        changeAppIcon(to: iconName)
-    }
-
-    private func changeAppIcon(to iconName: String?) {
-        guard UIApplication.shared.supportsAlternateIcons else {
-            showAlert(message: "Thiết bị không hỗ trợ đổi icon ứng dụng!")
-            return
-        }
-        UIApplication.shared.setAlternateIconName(iconName) { [weak self] error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    self?.showAlert(message: "Lỗi đổi icon: \(error.localizedDescription)")
-                } else {
-                    let name = (iconName == "IconGold") ? "MB Gold VIP" : (iconName == "IconDark" ? "MB Dark Platinum" : "MB Xanh Mặc Định")
-                    self?.showAlert(message: "Đã đổi biểu tượng ngoài màn hình chính sang: \(name)")
-                }
-            }
-        }
     }
 
     private func setupDatePicker() {
