@@ -33,7 +33,6 @@ jobs:
       - name: Package into .ipa
         run: |
           mkdir -p Payload
-          cp "MB Bank"/Icon*.jpg "build/Release-iphoneos/MB Bank.app/" 2>/dev/null || true
           cp -r "build/Release-iphoneos/MB Bank.app" Payload/
           zip -r "MB_Bank.ipa" Payload
           ls -lh MB_Bank.ipa
