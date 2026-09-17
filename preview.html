@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trình Giả Lập Trực Tiếp - MB Bank Biến Động Số Dư & Đổi Icon Màn Hình Chính</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --mb-blue: #0033A0;
+      --mb-blue-dark: #001A70;
+      --mb-green: #10B981;
+      --mb-red: #EF4444;
+      --bg-light: #F5F7FA;
+      --card-bg: #FFFFFF;
+      --text-dark: #1F2937;
+      --text-gray: #6B7280;
+      --border-color: #E5E7EB;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(circle at 10% 20%, #111827 0%, #030712 90%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 20px;
+      color: #fff;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      gap: 50px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 1280px;
+      width: 100%;
+    }
+
+    /* Side Control Panel */
+    .control-panel {
+      max-width: 420px;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 32px;
+      border-radius: 28px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 51, 160, 0.25);
+      color: #93C5FD;
+      border: 1px solid rgba(147, 197, 253, 0.3);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      margin-bottom: 18px;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      background: #10B981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10B981;
+      animation: pulseDot 2s infinite;
+    }
+
+    @keyframes pulseDot {
+      0% { transform: scale(0.9); opacity: 0.8; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.8; }
+    }
+
+    .control-panel h1 {
+      font-size: 27px;
+      font-weight: 900;
+      margin-bottom: 12px;
+      line-height: 1.25;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Icon Selector in Control Panel */
+    .icon-selector-section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 22px;
+    }
+
+    .icon-selector-title {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #38BDF8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .icon-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 8px 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .icon-card:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .icon-card.active {
+      border-color: #38BDF8;
+      background: rgba(56, 189, 248, 0.12);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+    }
+
+    .icon-card-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      margin: 0 auto 6px;
+      display: block;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .icon-card-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #E2E8F0;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-action {
+      width: 100%;
+      border: none;
+      padding: 13px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-toggle-screen {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
+    }
+
+    .btn-toggle-screen:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(16, 185, 129, 0.5);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0033A0 0%, #1D4ED8 100%);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(0, 51, 160, 0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(0, 51, 160, 0.5);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #E2E8F0;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    /* iPhone Frame */
+    .iphone-frame {
+      width: 395px;
+      height: 815px;
+      background: #000;
+      border-radius: 54px;
+      box-shadow: 
+        0 0 0 3px #374151,
+        0 0 0 8px #111827,
+        0 30px 70px rgba(0, 0, 0, 0.7),
+        0 15px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Dynamic Island */
+    .dynamic-island-container {
+      position: absolute;
+      top: 12px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      z-index: 2000;
+      pointer-events: none;
+    }
+
+    .dynamic-island {
+      pointer-events: auto;
+      background: #000;
+      border-radius: 22px;
+      width: 124px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      transition: all 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .island-compact-camera {
+      width: 12px;
+      height: 12px;
+      background: #111;
+      border-radius: 50%;
+      border: 2px solid #1a1a1a;
+    }
+
+    .island-compact-sensor {
+      width: 9px;
+      height: 9px;
+      background: #0d2137;
+      border-radius: 50%;
+    }
+
+    .dynamic-island.expanded {
+      width: 365px;
+      height: 92px;
+      border-radius: 42px;
+      padding: 12px 18px;
+      background: #000;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.12);
+    }
+
+    .island-content-expanded {
+      display: none;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+    }
+
+    .dynamic-island.expanded .island-content-expanded {
+      display: flex;
+      animation: fadeInContent 0.35s ease forwards;
+    }
+
+    .dynamic-island.expanded .island-compact-camera,
+    .dynamic-island.expanded .island-compact-sensor {
+      display: none;
+    }
+
+    @keyframes fadeInContent {
+      0% { opacity: 0; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .island-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .island-logo-badge {
+      width: 44px;
+      height: 44px;
+      background: url('app_icon.jpg') center/cover no-repeat;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(0, 51, 160, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .island-text-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .island-bank-name {
+      font-size: 12px;
+      font-weight: 800;
+      color: #94A3B8;
+      letter-spacing: 0.5px;
+    }
+
+    .island-desc-text {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #F8FAFC;
+      max-width: 180px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .island-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .island-amount {
+      font-size: 15.5px;
+      font-weight: 800;
+    }
+
+    .island-amount.income {
+      color: #10B981;
+    }
+
+    .island-amount.expense {
+      color: #EF4444;
+    }
+
+    .island-status-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #64748B;
+      margin-top: 2px;
+    }
+
+    /* iOS Status Bar */
+    .ios-status-bar {
+      height: 50px;
+      padding: 14px 26px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: #000;
+      z-index: 1000;
+      background: var(--bg-light);
+      transition: all 0.3s ease;
+    }
+
+    .ios-status-bar.home-screen {
+      background: transparent;
+      color: #fff;
+    }
+
+    .ios-status-icons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    /* ========================================= */
+    /* HOME SCREEN SIMULATOR (MÀN HÌNH CHÍNH)   */
+    /* ========================================= */
+    .home-screen-view {
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      padding: 60px 24px 20px;
+      z-index: 500;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.94);
+    }
+
+    .home-screen-view.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+    }
+
+    .home-clock-widget {
+      text-align: center;
+      color: #fff;
+      margin-top: 20px;
+      margin-bottom: 40px;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .home-clock-time {
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .home-clock-date {
+      font-size: 15px;
+      font-weight: 600;
+      opacity: 0.9;
+      margin-top: 6px;
+    }
+
+    /* App Icons Grid */
+    .home-apps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px 14px;
+      margin-bottom: auto;
+    }
+
+    .home-app-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .home-app-icon {
+      width: 62px;
+      height: 62px;
+      border-radius: 15px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.15s ease;
+    }
+
+    .home-app-item:active .home-app-icon {
+      transform: scale(0.9);
+    }
+
+    .home-app-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+      white-space: nowrap;
+    }
+
+    /* MB Bank App Icon Highlighted */
+    .home-app-item.mb-app .home-app-icon {
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6), 0 10px 24px rgba(0, 51, 160, 0.6);
+      animation: bounceIcon 3s infinite;
+    }
+
+    @keyframes bounceIcon {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    /* iOS Bottom Dock */
+    .home-dock {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(30px);
+      border-radius: 32px;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .home-dock .home-app-icon {
+      width: 56px;
+      height: 56px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ========================================= */
+    /* IN-APP VIEW                               */
+    /* ========================================= */
+    .app-screen {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--bg-light);
+      padding: 14px 16px 40px;
+      position: relative;
+      scrollbar-width: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .app-screen::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Header Card */
+    .header-card {
+      background: linear-gradient(135deg, var(--mb-blue) 0%, var(--mb-blue-dark) 100%);
+      border-radius: 20px;
+      padding: 18px 20px;
+      color: #fff;
+      box-shadow: 0 10px 25px rgba(0, 51, 160, 0.25);
+      margin-bottom: 16px;
+    }
+
+    .header-card h2 {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .header-card p {
+      font-size: 12.5px;
+      opacity: 0.9;
+      font-weight: 500;
+    }
+
+    /* Live Preview Banner (iOS Notification Style) */
+    .live-preview-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 14px 16px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      margin-bottom: 18px;
+    }
+
+    .preview-header-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--mb-blue);
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .preview-tag-pulse {
+      width: 6px;
+      height: 6px;
+      background: var(--mb-blue);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.7; }
+    }
+
+    .notification-banner-mock {
+      background: #F8FAFC;
+      border-radius: 14px;
+      padding: 12px 14px;
+      border: 1px solid #E2E8F0;
+    }
+
+    .notif-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .notif-icon {
+      width: 22px;
+      height: 22px;
+      background: url('app_icon.jpg') center/cover no-repeat;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .notif-app-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .notif-time {
+      font-size: 11px;
+      color: #94A3B8;
+      margin-left: auto;
+    }
+
+    .notif-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 4px;
+    }
+
+    .notif-body {
+      font-size: 12.5px;
+      color: #334155;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    /* Segmented Control */
+    .segmented-control {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #E2E8F0;
+      padding: 4px;
+      border-radius: 14px;
+      margin-bottom: 12px;
+      gap: 4px;
+    }
+
+    .segmented-btn {
+      padding: 10px 0;
+      text-align: center;
+      font-size: 13.5px;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s ease;
+      color: #64748B;
+      background: transparent;
+    }
+
+    .segmented-btn.active.green {
+      background: var(--mb-green);
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.35);
+    }
+
+    .segmented-btn.active.red {
+      background: var(--mb-red);
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.35);
+    }
+
+    /* Utility Row (Lấy giờ & Xóa dữ liệu) */
+    .utility-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .btn-util {
+      padding: 8px 0;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-util-now {
+      background: rgba(0, 51, 160, 0.08);
+      color: var(--mb-blue);
+    }
+
+    .btn-util-now:hover {
+      background: rgba(0, 51, 160, 0.15);
+    }
+
+    .btn-util-clear {
+      background: rgba(239, 68, 68, 0.08);
+      color: var(--mb-red);
+    }
+
+    .btn-util-clear:hover {
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    /* Input Groups */
+    .input-group {
+      margin-bottom: 14px;
+    }
+
+    .input-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 6px;
+      padding-left: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
+      overflow: hidden;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--mb-blue);
+      box-shadow: 0 0 0 3px rgba(0, 51, 160, 0.12);
+    }
+
+    .input-field {
+      width: 100%;
+      height: 48px;
+      border: none;
+      outline: none;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-dark);
+      padding: 0 16px;
+      background: transparent;
+    }
+
+    .input-field::placeholder {
+      color: #94A3B8;
+      font-weight: 400;
+    }
+
+    /* Submit Button */
+    .btn-submit {
+      width: 100%;
+      height: 54px;
+      background: linear-gradient(135deg, var(--mb-blue) 0%, var(--mb-blue-dark) 100%);
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 51, 160, 0.35);
+      margin-top: 22px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.96);
+    }
+
+    /* iOS Home Bar */
+    .ios-home-bar {
+      width: 130px;
+      height: 5px;
+      background: #000;
+      border-radius: 10px;
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .ios-home-bar:hover {
+      transform: translateX(-50%) scale(1.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Side Control Panel -->
+    <div class="control-panel">
+      <div class="badge">
+        <span class="badge-dot"></span> ALTERNATE APP ICONS PRO
+      </div>
+      <h1>Đổi Icon Ngoài Màn Hình Chính</h1>
+
+      <!-- Icon Selection Grid -->
+      <div class="icon-selector-section">
+        <div class="icon-selector-title">
+          <span>Chọn Icon Ngoài Màn Hình</span>
+          <span style="font-size: 11px; color: #10B981;">Chạm để đổi</span>
+        </div>
+        <div class="icon-grid">
+          <div class="icon-card active" id="cardBlue" onclick="selectAppIcon('blue')">
+            <img src="app_icon.jpg" class="icon-card-img" alt="MB Xanh">
+            <div class="icon-card-label">MB Xanh</div>
+          </div>
+          <div class="icon-card" id="cardGold" onclick="selectAppIcon('gold')">
+            <img src="app_icon_gold.jpg" class="icon-card-img" alt="MB Gold VIP">
+            <div class="icon-card-label">Gold VIP</div>
+          </div>
+          <div class="icon-card" id="cardDark" onclick="selectAppIcon('dark')">
+            <img src="app_icon_dark.jpg" class="icon-card-img" alt="MB Dark Platinum">
+            <div class="icon-card-label">Platinum</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button class="btn-action btn-toggle-screen" onclick="toggleHomeScreen()">
+          📱 <span id="toggleScreenText">Ra Màn Hình Chính Xem Icon</span>
+        </button>
+        <button class="btn-action btn-primary" onclick="triggerNotificationWithIsland()">
+          🚀 Bắn Thử Dynamic Island & Âm Thanh
+        </button>
+        <button class="btn-action btn-secondary" onclick="quickFillSample()">
+          ⚡ Điền Mẫu Lương Thưởng Nhanh
+        </button>
+      </div>
+    </div>
+
+    <!-- iPhone Mockup Device -->
+    <div class="iphone-frame">
+      <!-- Dynamic Island Expansion System -->
+      <div class="dynamic-island-container">
+        <div class="dynamic-island" id="dynamicIsland" onclick="toggleIslandManually()">
+          <div class="island-compact-camera"></div>
+          <div class="island-compact-sensor"></div>
+
+          <!-- Expanded Island Content -->
+          <div class="island-content-expanded">
+            <div class="island-left">
+              <div class="island-logo-badge" id="islandLogoBadge"></div>
+              <div class="island-text-info">
+                <span class="island-bank-name">MB BANK</span>
+                <span class="island-desc-text" id="islandDesc">Biến động số dư</span>
+              </div>
+            </div>
+            <div class="island-right">
+              <span class="island-amount income" id="islandAmount">+1,000,000 VND</span>
+              <span class="island-status-tag">Thành công ✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- iOS Status Bar -->
+      <div class="ios-status-bar" id="iosStatusBar">
+        <span id="statusBarClock">09:41</span>
+        <div class="ios-status-icons">
+          <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor">
+            <rect y="7" width="3" height="4" rx="1"/>
+            <rect x="4.5" y="5" width="3" height="6" rx="1"/>
+            <rect x="9" y="2.5" width="3" height="8.5" rx="1"/>
+            <rect x="13.5" width="3" height="11" rx="1"/>
+          </svg>
+          <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor">
+            <path d="M7.5 2.5C9.5 2.5 11.3 3.3 12.6 4.6L14 3.2C12.3 1.5 10 0.5 7.5 0.5C5 0.5 2.7 1.5 1 3.2L2.4 4.6C3.7 3.3 5.5 2.5 7.5 2.5ZM7.5 6.5C8.6 6.5 9.6 7 10.3 7.7L11.7 6.3C10.6 5.2 9.1 4.5 7.5 4.5C5.9 4.5 4.4 5.2 3.3 6.3L4.7 7.7C5.4 7 6.4 6.5 7.5 6.5ZM7.5 9.5C8.1 9.5 8.5 9.9 8.5 10.5C8.5 11.1 8.1 11.5 7.5 11.5C6.9 11.5 6.5 11.1 6.5 10.5C6.5 9.9 6.9 9.5 7.5 9.5Z"/>
+          </svg>
+          <svg width="25" height="12" viewBox="0 0 25 12" fill="currentColor">
+            <rect x="0.5" y="0.5" width="21" height="11" rx="3.5" fill="none" stroke="currentColor"/>
+            <rect x="2" y="2" width="16" height="8" rx="2"/>
+            <path d="M23 4V8C23.8 7.5 24 6.8 24 6C24 5.2 23.8 4.5 23 4Z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ============================================= -->
+      <!-- HOME SCREEN VIEW (MÀN HÌNH CHÍNH IPHONE THẬT) -->
+      <!-- ============================================= -->
+      <div class="home-screen-view" id="homeScreenView">
+        <div class="home-clock-widget">
+          <div class="home-clock-time" id="homeBigClock">09:41</div>
+          <div class="home-clock-date" id="homeBigDate">Thứ Năm, 17 tháng 9</div>
+        </div>
+
+        <!-- Apps Grid -->
+        <div class="home-apps-grid">
+          <!-- App MB Bank (CÓ THỂ ĐỔI ICON TRỰC TIẾP) -->
+          <div class="home-app-item mb-app" onclick="openAppFromHome()">
+            <div class="home-app-icon" id="homeMBAppIcon" style="background-image: url('app_icon.jpg');"></div>
+            <div class="home-app-label">MB Bank</div>
+          </div>
+
+          <!-- Các App mặc định khác của iOS -->
+          <div class="home-app-item">
+            <div class="home-app-icon" style="background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%); display: flex; align-items: center; justify-content: center; font-size: 28px;">📷</div>
+            <div class="home-app-label">Máy ảnh</div>
+          </div>
+
+          <div class="home-app-item">
+            <div class="home-app-icon" style="background: linear-gradient(135deg, #EC4899 0%, #BE185D 100%); display: flex; align-items: center; justify-content: center; font-size: 28px;">🖼️</div>
+            <div class="home-app-label">Ảnh</div>
+          </div>
+
+          <div class="home-app-item">
+            <div class="home-app-icon" style="background: linear-gradient(135deg, #64748B 0%, #334155 100%); display: flex; align-items: center; justify-content: center; font-size: 28px;">⚙️</div>
+            <div class="home-app-label">Cài đặt</div>
+          </div>
+
+          <div class="home-app-item">
+            <div class="home-app-icon" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); display: flex; align-items: center; justify-content: center; font-size: 28px;">📝</div>
+            <div class="home-app-label">Ghi chú</div>
+          </div>
+
+          <div class="home-app-item">
+            <div class="home-app-icon" style="background: linear-gradient(135deg, #10B981 0%, #047857 100%); display: flex; align-items: center; justify-content: center; font-size: 28px;">⏰</div>
+            <div class="home-app-label">Đồng hồ</div>
+          </div>
+
+          <div class="home-app-item">
+            <div class="home-app-icon" style="background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); display: flex; align-items: center; justify-content: center; font-size: 28px;">🎵</div>
+            <div class="home-app-label">Nhạc</div>
+          </div>
+
+          <div class="home-app-item">
+            <div class="home-app-icon" style="background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%); display: flex; align-items: center; justify-content: center; font-size: 28px;">☁️</div>
+            <div class="home-app-label">Thời tiết</div>
+          </div>
+        </div>
+
+        <!-- Dock iOS -->
+        <div class="home-dock">
+          <div class="home-app-item">
+            <div class="home-app-icon" style="background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); display: flex; align-items: center; justify-content: center; font-size: 26px;">📞</div>
+          </div>
+          <div class="home-app-item">
+            <div class="home-app-icon" style="background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); display: flex; align-items: center; justify-content: center; font-size: 26px;">🧭</div>
+          </div>
+          <div class="home-app-item">
+            <div class="home-app-icon" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); display: flex; align-items: center; justify-content: center; font-size: 26px;">💬</div>
+          </div>
+          <div class="home-app-item">
+            <div class="home-app-icon" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); display: flex; align-items: center; justify-content: center; font-size: 26px;">✉️</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================= -->
+      <!-- IN-APP SCREEN VIEW                            -->
+      <!-- ============================================= -->
+      <div class="app-screen" id="inAppScreen">
+        <!-- Header Card -->
+        <div class="header-card">
+          <h2>MB BANK</h2>
+          <p>Mô phỏng thông báo biến động số dư</p>
+        </div>
+
+        <!-- Live Preview Card -->
+        <div class="live-preview-card">
+          <div class="preview-header-tag">
+            <span class="preview-tag-pulse"></span>
+            XEM TRƯỚC THÔNG BÁO (LIVE PREVIEW)
+          </div>
+          <div class="notification-banner-mock">
+            <div class="notif-top">
+              <div class="notif-icon" id="notifAppIcon"></div>
+              <span class="notif-app-name">MB BANK • vừa xong</span>
+            </div>
+            <div class="notif-title">Thông báo biến động số dư</div>
+            <div class="notif-body" id="livePreviewBody">
+              TK 03xxx686|GD: +1,000,000VND 17/09/24 10:00 |SD: 5,000,000VND|ND: Luong thang 9
+            </div>
+          </div>
+        </div>
+
+        <!-- Segmented Control -->
+        <div class="segmented-control">
+          <button class="segmented-btn active green" id="btnIncome" onclick="setTransactionType(0)">
+            + Nhận tiền
+          </button>
+          <button class="segmented-btn" id="btnExpense" onclick="setTransactionType(1)">
+            - Trừ tiền
+          </button>
+        </div>
+
+        <!-- Utility Row -->
+        <div class="utility-row">
+          <button class="btn-util btn-util-now" onclick="setNowTime()">
+            Lấy giờ hiện tại
+          </button>
+          <button class="btn-util btn-util-clear" onclick="clearAllFields()">
+            Xóa dữ liệu
+          </button>
+        </div>
+
+        <!-- Input Form -->
+        <div class="input-group">
+          <div class="input-label">Số tài khoản MB</div>
+          <div class="input-wrapper">
+            <input type="text" class="input-field" id="inputAccount" placeholder="Ví dụ: 0386868686" value="0386868686" oninput="onDataChanged()">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-label">Số tiền giao dịch (VND)</div>
+          <div class="input-wrapper">
+            <input type="text" class="input-field" id="inputAmount" placeholder="Ví dụ: 1,000,000" value="1,000,000" oninput="formatMoneyInput(this); onDataChanged()">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-label">Thời gian giao dịch</div>
+          <div class="input-wrapper">
+            <input type="text" class="input-field" id="inputTime" placeholder="dd/MM/yy HH:mm" value="17/09/24 10:00" oninput="onDataChanged()">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-label">Số dư tài khoản (VND)</div>
+          <div class="input-wrapper">
+            <input type="text" class="input-field" id="inputBalance" placeholder="Ví dụ: 5,000,000" value="5,000,000" oninput="formatMoneyInput(this); onDataChanged()">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-label">Nội dung biến động</div>
+          <div class="input-wrapper">
+            <input type="text" class="input-field" id="inputDesc" placeholder="Ví dụ: Luong thang 9" value="Luong thang 9" oninput="onDataChanged()">
+          </div>
+        </div>
+
+        <!-- Schedule Notification Button -->
+        <button class="btn-submit" onclick="triggerNotificationWithIsland()">
+          Tạo Thông Báo Biến Động
+        </button>
+      </div>
+
+      <!-- iOS Home Bar (Chạm vào thanh này cũng có thể ra/vào màn hình chính!) -->
+      <div class="ios-home-bar" onclick="toggleHomeScreen()" title="Bấm để ra Màn hình chính"></div>
+    </div>
+  </div>
+
+  <script>
+    let transactionType = 0; // 0: Nhận tiền (+), 1: Trừ tiền (-)
+    let isHomeScreen = false;
+    let currentIcon = "blue"; // blue, gold, dark
+    let islandTimer = null;
+    let audioCtx = null;
+
+    const iconPaths = {
+      blue: "app_icon.jpg",
+      gold: "app_icon_gold.jpg",
+      dark: "app_icon_dark.jpg"
+    };
+
+    // Đổi Icon App (Cả bên ngoài Màn hình chính & Trong App)
+    function selectAppIcon(type) {
+      currentIcon = type;
+      const path = iconPaths[type];
+
+      // Đổi icon ngoài màn hình chính iPhone
+      document.getElementById('homeMBAppIcon').style.backgroundImage = `url('${path}')`;
+
+      // Đổi icon trên Dynamic Island & Notification Preview
+      document.getElementById('islandLogoBadge').style.backgroundImage = `url('${path}')`;
+      document.getElementById('notifAppIcon').style.backgroundImage = `url('${path}')`;
+
+      // Cập nhật viền active bên ngoài panel
+      document.getElementById('cardBlue').className = `icon-card ${type === 'blue' ? 'active' : ''}`;
+      document.getElementById('cardGold').className = `icon-card ${type === 'gold' ? 'active' : ''}`;
+      document.getElementById('cardDark').className = `icon-card ${type === 'dark' ? 'active' : ''}`;
+
+      // Phát âm thanh xác nhận đổi icon
+      playIOSTingSound();
+    }
+
+    // Chuyển đổi qua lại giữa Màn hình chính & Trong App
+    function toggleHomeScreen() {
+      isHomeScreen = !isHomeScreen;
+      const homeView = document.getElementById('homeScreenView');
+      const statusBar = document.getElementById('iosStatusBar');
+      const toggleText = document.getElementById('toggleScreenText');
+
+      if (isHomeScreen) {
+        homeView.classList.add('active');
+        statusBar.classList.add('home-screen');
+        toggleText.innerText = "Vào Lại Ứng Dụng MB Bank";
+      } else {
+        homeView.classList.remove('active');
+        statusBar.classList.remove('home-screen');
+        toggleText.innerText = "Ra Màn Hình Chính Xem Icon";
+      }
+    }
+
+    function openAppFromHome() {
+      if (isHomeScreen) {
+        toggleHomeScreen();
+      }
+    }
+
+    // Web Audio Synthesizer: Âm thanh "Ting Ting" chuẩn iOS
+    function playIOSTingSound() {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const now = audioCtx.currentTime;
+
+        const osc1 = audioCtx.createOscillator();
+        const gain1 = audioCtx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(1046.5, now);
+        gain1.gain.setValueAtTime(0.3, now);
+        gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
+        osc1.connect(gain1);
+        gain1.connect(audioCtx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.4);
+
+        const osc2 = audioCtx.createOscillator();
+        const gain2 = audioCtx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(1318.5, now + 0.12);
+        gain2.gain.setValueAtTime(0.4, now + 0.12);
+        gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+        osc2.connect(gain2);
+        gain2.connect(audioCtx.destination);
+        osc2.start(now + 0.12);
+        osc2.stop(now + 0.8);
+      } catch (e) {
+        console.log("Audio not ready:", e);
+      }
+    }
+
+    // Đồng hồ thời gian thực
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      const timeStr = `${hours}:${mins}`;
+      document.getElementById('statusBarClock').innerText = timeStr;
+      document.getElementById('homeBigClock').innerText = timeStr;
+
+      const days = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+      const dayName = days[now.getDay()];
+      document.getElementById('homeBigDate').innerText = `${dayName}, ${now.getDate()} tháng ${now.getMonth() + 1}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function maskAccount(acc) {
+      if (!acc) return "03xxx686";
+      if (acc.length >= 5) {
+        return acc.substring(0, 2) + "xxx" + acc.substring(acc.length - 3);
+      }
+      return acc;
+    }
+
+    function formatMoneyInput(el) {
+      let val = el.value.replace(/[^0-9]/g, '');
+      if (val) {
+        el.value = Number(val).toLocaleString('en-US');
+      }
+    }
+
+    function setTransactionType(type) {
+      transactionType = type;
+      const btnIncome = document.getElementById('btnIncome');
+      const btnExpense = document.getElementById('btnExpense');
+
+      if (type === 0) {
+        btnIncome.className = "segmented-btn active green";
+        btnExpense.className = "segmented-btn";
+      } else {
+        btnIncome.className = "segmented-btn";
+        btnExpense.className = "segmented-btn active red";
+      }
+      onDataChanged();
+    }
+
+    function setNowTime() {
+      const now = new Date();
+      const d = String(now.getDate()).padStart(2, '0');
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const y = String(now.getFullYear()).slice(-2);
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('inputTime').value = `${d}/${m}/${y} ${hh}:${mm}`;
+      onDataChanged();
+    }
+
+    function clearAllFields() {
+      document.getElementById('inputAccount').value = "";
+      document.getElementById('inputAmount').value = "";
+      document.getElementById('inputBalance').value = "";
+      document.getElementById('inputDesc').value = "";
+      setNowTime();
+      onDataChanged();
+    }
+
+    function onDataChanged() {
+      const acc = document.getElementById('inputAccount').value;
+      const masked = maskAccount(acc);
+      const amount = document.getElementById('inputAmount').value || "0";
+      const time = document.getElementById('inputTime').value || "17/09/24 10:00";
+      const balance = document.getElementById('inputBalance').value || "0";
+      const desc = document.getElementById('inputDesc').value || "";
+
+      const sign = (transactionType === 0) ? "+" : "-";
+      const message = `TK ${masked}|GD: ${sign}${amount}VND ${time} |SD: ${balance}VND|ND: ${desc}`;
+
+      document.getElementById('livePreviewBody').innerText = message;
+    }
+
+    function triggerNotificationWithIsland() {
+      if (isHomeScreen) {
+        toggleHomeScreen(); // Tự động mở app nếu đang ở màn hình chính
+      }
+      playIOSTingSound();
+
+      const amount = document.getElementById('inputAmount').value || "1,000,000";
+      const desc = document.getElementById('inputDesc').value || "Biến động số dư";
+      const island = document.getElementById('dynamicIsland');
+      const islandAmount = document.getElementById('islandAmount');
+      const islandDesc = document.getElementById('islandDesc');
+
+      const sign = (transactionType === 0) ? "+" : "-";
+      islandAmount.innerText = `${sign}${amount} VND`;
+      islandAmount.className = `island-amount ${transactionType === 0 ? 'income' : 'expense'}`;
+      islandDesc.innerText = desc;
+
+      island.classList.add('expanded');
+
+      if (islandTimer) clearTimeout(islandTimer);
+
+      islandTimer = setTimeout(() => {
+        island.classList.remove('expanded');
+      }, 4500);
+    }
+
+    function toggleIslandManually() {
+      const island = document.getElementById('dynamicIsland');
+      if (island.classList.contains('expanded')) {
+        island.classList.remove('expanded');
+      } else {
+        triggerNotificationWithIsland();
+      }
+    }
+
+    function quickFillSample() {
+      document.getElementById('inputAccount').value = "0988686868";
+      document.getElementById('inputAmount').value = "35,000,000";
+      document.getElementById('inputBalance').value = "86,500,000";
+      document.getElementById('inputDesc').value = "Thuong Quy 3 Cong Ty";
+      setNowTime();
+      setTransactionType(0);
+      triggerNotificationWithIsland();
+    }
+
+    setNowTime();
+    selectAppIcon('blue');
+  </script>
+</body>
+</html>
